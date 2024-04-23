@@ -51,13 +51,16 @@ public class Renderer extends AbstractRenderer {
 
         renderSolid(axis);
         renderSolid(light);
-//        renderSolid(simpleSample);
+        renderSolid(simpleSample);
         renderSolid(dragon);
     }
 
     private void initSolids() {
         axis = new Axis(vertexColorShader);
-        light = new Light(flatColorShader, new Vec3D(0.5f, 0.5f, .7f), new Vec3D(0.7, 0.5,0));
+        light = new Light(flatColorShader,
+                new Vec3D(0.5f, 0.5f, .7f),
+                new Vec3D(0., 0.5,0),
+                new Vec3D(1., 1.,1.));
 
         try {
             simpleSample = new SimpleSample(phongShader);

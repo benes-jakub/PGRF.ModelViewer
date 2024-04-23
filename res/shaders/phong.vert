@@ -12,14 +12,20 @@ uniform vec3 uCameraPosition;
 
 out vec3 normal;
 out vec3 lightVector;
+out vec3 cameraVector;
 
 void main() {
     vec4 worldPosition = uModel * vec4(inPosition, 1.0);
-    gl_Position = uProj * uView * worldPosition;
 
     // Calculate light vector in world space
     lightVector = uLightPosition - worldPosition.xyz;
+    // Calculate vector in view space
+    cameraVector = uCameraPosition - worldPosition.xyz;
+
 
     // Transform normal - model
-    normal = transpose(inverse(mat3(uModel))) * inNormal;
+    normal = inverse(transpose(mat3(uModel))) * inNormal;
+
+    // Final position of vertex
+    gl_Position = uProj * uView * worldPosition;
 }

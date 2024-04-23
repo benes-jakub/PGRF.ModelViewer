@@ -10,12 +10,14 @@ import static org.lwjgl.opengl.GL20.glUniform3f;
 
 public class Light  extends Solid {
     private Vec3D position;
-    private Vec3D color;
+    private Vec3D diffuseColor;
+    private Vec3D specularColor;
 
-    public Light(int shader, Vec3D position, Vec3D color) {
+    public Light(int shader, Vec3D position, Vec3D diffuseColor, Vec3D specularColor) {
         super(shader);
         this.position = position;
-        this.color = color;
+        this.diffuseColor = diffuseColor;
+        this.specularColor = specularColor;
         this.topology = GL_TRIANGLES;
 
         // Model matrix - light position
@@ -49,14 +51,18 @@ public class Light  extends Solid {
     protected void setUniforms(Light light, Vec3D cameraPosition) {
         super.setUniforms(light, cameraPosition);
         int uColor = glGetUniformLocation(shader, "uColor");
-        glUniform3f(uColor, (float)color.getX(), (float)color.getY(), (float)color.getZ());
+        glUniform3f(uColor, (float)diffuseColor.getX(), (float)diffuseColor.getY(), (float)diffuseColor.getZ());
     }
 
     public Vec3D getPosition() {
         return position;
     }
 
-    public Vec3D getColor() {
-        return color;
+    public Vec3D getDiffuseColor() {
+        return diffuseColor;
+    }
+
+    public Vec3D getSpecularColor() {
+        return specularColor;
     }
 }

@@ -48,11 +48,4 @@ public class Dragon extends Solid{
         };
         buffers = new OGLBuffers(vb, attributes, indices);
     }
-
-    @Override
-    protected void setUniforms(Light light, Vec3D cameraPosition) {
-        super.setUniforms(light, cameraPosition);
-        int uColor = glGetUniformLocation(shader, "uColor");
-        glUniform3f(uColor, 1.f, 0.f, 0.f);
-    }
 }

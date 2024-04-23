@@ -36,8 +36,11 @@ public class Solid {
         int uLightPosition = glGetUniformLocation(shader, "uLightPosition");
         glUniform3f(uLightPosition, (float)light.getPosition().getX(), (float)light.getPosition().getY(), (float)light.getPosition().getZ());
 
-        int uLightColor = glGetUniformLocation(shader, "uLightColor");
-        glUniform3f(uLightColor, (float)light.getColor().getX(), (float)light.getColor().getY(), (float)light.getColor().getZ());
+        int uLightDiffuseColor = glGetUniformLocation(shader, "uLightDiffuseColor");
+        glUniform3f(uLightDiffuseColor, (float)light.getDiffuseColor().getX(), (float)light.getDiffuseColor().getY(), (float)light.getDiffuseColor().getZ());
+
+        int uLightSpecularColor = glGetUniformLocation(shader, "uLightSpecularColor");
+        glUniform3f(uLightSpecularColor, (float)light.getSpecularColor().getX(), (float)light.getSpecularColor().getY(), (float)light.getSpecularColor().getZ());
 
         int uCameraPosition = glGetUniformLocation(shader, "uCameraPosition");
         glUniform3f(uCameraPosition, (float)cameraPosition.getX(), (float)cameraPosition.getY(), (float)cameraPosition.getZ());
