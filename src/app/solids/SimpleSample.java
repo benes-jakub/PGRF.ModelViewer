@@ -5,6 +5,7 @@ import de.javagl.obj.ObjData;
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 import lwjglutils.OGLBuffers;
+import transforms.Vec3D;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,8 +40,8 @@ public class SimpleSample extends Solid{
     }
 
     @Override
-    protected void setUniforms(Light light) {
-        super.setUniforms(light);
+    protected void setUniforms(Light light, Vec3D cameraPosition) {
+        super.setUniforms(light, cameraPosition);
         int uColor = glGetUniformLocation(shader, "uColor");
         glUniform3f(uColor, 1.f, 0.f, 0.f);
     }

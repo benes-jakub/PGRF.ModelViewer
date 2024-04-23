@@ -5,6 +5,7 @@ import de.javagl.obj.ObjData;
 import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 import lwjglutils.OGLBuffers;
+import transforms.Vec3D;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,17 +27,31 @@ public class Dragon extends Solid{
         // Obtain the data from the OBJ, as direct buffers:
         int[] indices = ObjData.getFaceVertexIndicesArray(obj, 3);
         float[] vertices = ObjData.getVerticesArray(obj);
+        float[] normals  = ObjData.getNormalsArray(obj);
+
+        float[] vb = new float[vertices.length + normals.length];
+        for(int i = 0; i < vb.length; i += 6) {
+            // vertices
+            vb[i] = vertices[i / 2];
+            vb[i + 1] = vertices[i / 2 + 1];
+            vb[i + 2] = vertices[i / 2 + 2];
+            // normals
+            vb[i + 3] = normals[i / 2];
+            vb[i + 4] = normals[i / 2 + 1];
+            vb[i + 5] = normals[i / 2 + 2];
+        }
 
         // Buffers
         OGLBuffers.Attrib[] attributes = {
                 new OGLBuffers.Attrib("inPosition", 3),
+                new OGLBuffers.Attrib("inNormal", 3),
         };
-        buffers = new OGLBuffers(vertices, attributes, indices);
+        buffers = new OGLBuffers(vb, attributes, indices);
     }
 
     @Override
-    protected void setUniforms(Light light) {
-        super.setUniforms(light);
+    protected void setUniforms(Light light, Vec3D cameraPosition) {
+        super.setUniforms(light, cameraPosition);
         int uColor = glGetUniformLocation(shader, "uColor");
         glUniform3f(uColor, 1.f, 0.f, 0.f);
     }

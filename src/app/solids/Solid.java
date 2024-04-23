@@ -3,6 +3,7 @@ package app.solids;
 import lwjglutils.OGLBuffers;
 import transforms.Mat4;
 import transforms.Mat4Identity;
+import transforms.Vec3D;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -18,8 +19,8 @@ public class Solid {
         this.model = new Mat4Identity();
     }
 
-    public void draw(Light light) {
-        setUniforms(light);
+    public void draw(Light light, Vec3D cameraPosition) {
+        setUniforms(light, cameraPosition);
         this.buffers.draw(topology, shader);
     }
 
@@ -27,7 +28,7 @@ public class Solid {
         return shader;
     }
 
-    protected void setUniforms(Light light){
+    protected void setUniforms(Light light, Vec3D cameraPosition){
         int uModel = glGetUniformLocation(shader, "uModel");
         glUniformMatrix4fv(uModel, false, model.floatArray());
         if(light == null) return;
@@ -37,6 +38,9 @@ public class Solid {
 
         int uLightColor = glGetUniformLocation(shader, "uLightColor");
         glUniform3f(uLightColor, (float)light.getColor().getX(), (float)light.getColor().getY(), (float)light.getColor().getZ());
+
+        int uCameraPosition = glGetUniformLocation(shader, "uCameraPosition");
+        glUniform3f(uCameraPosition, (float)cameraPosition.getX(), (float)cameraPosition.getY(), (float)cameraPosition.getZ());
     };
 
     public void setModel(Mat4 model) {

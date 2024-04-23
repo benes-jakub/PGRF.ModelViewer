@@ -46,8 +46,8 @@ public class Light  extends Solid {
     }
 
     @Override
-    protected void setUniforms(Light light) {
-        super.setUniforms(light);
+    protected void setUniforms(Light light, Vec3D cameraPosition) {
+        super.setUniforms(light, cameraPosition);
         int uColor = glGetUniformLocation(shader, "uColor");
         glUniform3f(uColor, (float)color.getX(), (float)color.getY(), (float)color.getZ());
     }

@@ -57,7 +57,7 @@ public class Renderer extends AbstractRenderer {
 
     private void initSolids() {
         axis = new Axis(vertexColorShader);
-        light = new Light(flatColorShader, new Vec3D(0.5f, 0.5f, 0.7f), new Vec3D(1, 1,1));
+        light = new Light(flatColorShader, new Vec3D(0.5f, 0.5f, .7f), new Vec3D(0.7, 0.5,0));
 
         try {
             simpleSample = new SimpleSample(phongShader);
@@ -88,7 +88,7 @@ public class Renderer extends AbstractRenderer {
     private void renderSolid(Solid solid) {
         glUseProgram(solid.getShader());
         setGlobalUniforms(solid.getShader());
-        solid.draw(light);
+        solid.draw(light, camera.getEye());
     }
 
     private void setGlobalUniforms(int shader) {

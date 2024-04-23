@@ -1,6 +1,7 @@
 package app.solids;
 
 import lwjglutils.OGLBuffers;
+import transforms.Vec3D;
 
 import static org.lwjgl.opengl.GL11.GL_LINES;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
@@ -41,7 +42,7 @@ public class Axis extends Solid{
     }
 
     @Override
-    protected void setUniforms(Light light) {
+    protected void setUniforms(Light light, Vec3D cameraPosition) {
         int uView = glGetUniformLocation(shader, "uColor");
         glUniform3f(uView, 1.f, 0.f, 0.f);
     }
