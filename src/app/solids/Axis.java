@@ -41,7 +41,7 @@ public class Axis extends Solid{
     }
 
     @Override
-    protected void setUniforms() {
+    protected void setUniforms(Light light) {
         int uView = glGetUniformLocation(shader, "uColor");
         glUniform3f(uView, 1.f, 0.f, 0.f);
     }

@@ -39,7 +39,8 @@ public class SimpleSample extends Solid{
     }
 
     @Override
-    protected void setUniforms() {
+    protected void setUniforms(Light light) {
+        super.setUniforms(light);
         int uColor = glGetUniformLocation(shader, "uColor");
         glUniform3f(uColor, 1.f, 0.f, 0.f);
     }

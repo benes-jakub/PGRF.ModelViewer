@@ -1,6 +1,7 @@
 package app;
 
 import app.solids.Axis;
+import app.solids.Light;
 import app.solids.SimpleSample;
 import app.solids.Solid;
 import lwjglutils.OGLBuffers;
@@ -26,7 +27,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class Renderer extends AbstractRenderer {
 
     // Shaders
-    private int vertexColorShader, flatColorShader;
+    private int vertexColorShader, flatColorShader, phongShader;
 
     // Camera
     private Camera camera;
@@ -37,6 +38,7 @@ public class Renderer extends AbstractRenderer {
     // Solids
     private Axis axis;
     private SimpleSample simpleSample;
+    private Light light;
 
     @Override
     public void init() {
@@ -52,20 +54,22 @@ public class Renderer extends AbstractRenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         renderSolid(axis);
+        renderSolid(light);
         renderSolid(simpleSample);
     }
 
     private void renderSolid(Solid solid) {
         glUseProgram(solid.getShader());
         setGlobalUniforms(solid.getShader());
-        solid.draw();
+        solid.draw(light);
     }
 
     private void initSolids() {
         axis = new Axis(vertexColorShader);
+        light = new Light(flatColorShader, new Vec3D(0.5f, 0.5f, 0.7f), new Vec3D(1, 1,1));
 
         try {
-            simpleSample = new SimpleSample(flatColorShader);
+            simpleSample = new SimpleSample(phongShader);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -85,6 +89,7 @@ public class Renderer extends AbstractRenderer {
     private void initShaders() {
         vertexColorShader = ShaderUtils.loadProgram("/shaders/vertexColor");
         flatColorShader = ShaderUtils.loadProgram("/shaders/flatColor");
+        phongShader = ShaderUtils.loadProgram("/shaders/phong");
     }
 
     private void setGlobalUniforms(int shader) {
