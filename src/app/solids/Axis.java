@@ -3,6 +3,8 @@ package app.solids;
 import lwjglutils.OGLBuffers;
 
 import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glUniform3f;
 
 public class Axis extends Solid{
 
@@ -36,5 +38,11 @@ public class Axis extends Solid{
                 new OGLBuffers.Attrib("inColor", 3),
         };
         buffers = new OGLBuffers(vb, attributes, ib);
+    }
+
+    @Override
+    protected void setUniforms() {
+        int uView = glGetUniformLocation(shader, "uColor");
+        glUniform3f(uView, 1.f, 0.f, 0.f);
     }
 }

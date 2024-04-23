@@ -13,10 +13,13 @@ public class Solid {
     }
 
     public void draw() {
+        setUniforms();
         this.buffers.draw(topology, shader);
     }
 
     public int getShader() {
         return shader;
     }
+
+    protected void setUniforms(){};
 }

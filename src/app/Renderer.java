@@ -1,6 +1,7 @@
 package app;
 
 import app.solids.Axis;
+import app.solids.SimpleSample;
 import app.solids.Solid;
 import lwjglutils.OGLBuffers;
 import lwjglutils.ShaderUtils;
@@ -15,6 +16,7 @@ import transforms.Mat4;
 import transforms.Mat4PerspRH;
 import transforms.Vec3D;
 
+import java.io.IOException;
 import java.nio.DoubleBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -24,7 +26,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class Renderer extends AbstractRenderer {
 
     // Shaders
-    private int vertexColorShader;
+    private int vertexColorShader, flatColorShader;
 
     // Camera
     private Camera camera;
@@ -34,9 +36,12 @@ public class Renderer extends AbstractRenderer {
 
     // Solids
     private Axis axis;
+    private SimpleSample simpleSample;
 
     @Override
     public void init() {
+        glEnable(GL_DEPTH_TEST);
+
         initShaders();
         initCamera();
         initSolids();
@@ -47,6 +52,7 @@ public class Renderer extends AbstractRenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         renderSolid(axis);
+        renderSolid(simpleSample);
     }
 
     private void renderSolid(Solid solid) {
@@ -57,13 +63,19 @@ public class Renderer extends AbstractRenderer {
 
     private void initSolids() {
         axis = new Axis(vertexColorShader);
+
+        try {
+            simpleSample = new SimpleSample(flatColorShader);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void initCamera() {
         camera = new Camera()
                 .withPosition(new Vec3D(0, 0, 0))
-                .withAzimuth(Math.toRadians(70))
-                .withZenith(Math.toRadians(25))
+                .withAzimuth(Math.toRadians(45))
+                .withZenith(Math.toRadians(-25))
                 .withFirstPerson(false)
                 .withRadius(3);
 
@@ -72,6 +84,7 @@ public class Renderer extends AbstractRenderer {
 
     private void initShaders() {
         vertexColorShader = ShaderUtils.loadProgram("/shaders/vertexColor");
+        flatColorShader = ShaderUtils.loadProgram("/shaders/flatColor");
     }
 
     private void setGlobalUniforms(int shader) {
