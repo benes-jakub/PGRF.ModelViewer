@@ -4,6 +4,8 @@ in vec3 normal;
 in vec3 lightVector;
 in vec3 cameraVector;
 
+uniform vec3 uBaseColor;
+
 uniform vec3 uLightDiffuseColor;
 uniform vec3 uLightSpecularColor;
 
@@ -24,8 +26,8 @@ void main() {
     // Set phong
     vec3 ambient = vec3(.1f, .1f, .1f);
     vec3 diffuse = nDotL * uLightDiffuseColor;
-    vec3 specular = (pow(rDotV, 20.f)) * uLightSpecularColor;
+    vec3 specular = (pow(rDotV, 8.f)) * uLightSpecularColor;
 
-    outColor = vec4((ambient + diffuse + specular), 1.f);
+    outColor = vec4((ambient + diffuse + specular) * uBaseColor, 1.f);
 //    outColor = vec4(unitNormal, 1.f);
 }

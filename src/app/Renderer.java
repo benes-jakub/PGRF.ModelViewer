@@ -32,9 +32,12 @@ public class Renderer extends AbstractRenderer {
     // Solids
     private Axis axis;
     private Light light;
-    private SimpleSample simpleSample;
+    private Quad floor;
 
     private Dragon dragon;
+
+    // Solid animation
+    private float dragonRotation = 0.f;
 
     @Override
     public void init() {
@@ -51,24 +54,33 @@ public class Renderer extends AbstractRenderer {
 
         renderSolid(axis);
         renderSolid(light);
-        renderSolid(simpleSample);
+        renderSolid(floor);
+
+        dragon.setModel(
+                new Mat4Scale(0.1f, 0.1f, 0.1f)
+                .mul(new Mat4RotX(Math.toRadians(90)))
+                .mul(new Mat4RotZ(Math.toRadians(dragonRotation)))
+        );
         renderSolid(dragon);
+        dragonRotation += 0.2f;
     }
 
     private void initSolids() {
-        axis = new Axis(vertexColorShader);
-        light = new Light(flatColorShader,
-                new Vec3D(0.5f, 0.5f, .7f),
-                new Vec3D(0., 0.5,0),
-                new Vec3D(1., 1.,1.));
-
         try {
-            simpleSample = new SimpleSample(phongShader);
+            floor = new Quad(phongShader);
             dragon = new Dragon(phongShader);
-            dragon.setModel(new Mat4Scale(0.1f, 0.1f, 0.1f).mul(new Mat4RotX(Math.toRadians(90))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        floor.setModel(new Mat4Scale(2.f).mul(new Mat4Transl(0, 0, -0.2f)));
+
+
+        axis = new Axis(vertexColorShader);
+        light = new Light(flatColorShader,
+                new Vec3D(0.5f, 0.5f, .7f),
+                new Vec3D(0.5, 0.5,0.5),
+                new Vec3D(1., 1.,1.));
     }
 
     private void initShaders() {
