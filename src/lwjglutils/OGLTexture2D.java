@@ -239,6 +239,8 @@ public class OGLTexture2D implements OGLTexture {
         if (!stbi_info_from_memory(imageBuffer, width, height, components))
             throw new IOException("Failed to read image information: " + stbi_failure_reason());
 
+		stbi_set_flip_vertically_on_load(true);
+
         ByteBuffer data = stbi_load_from_memory(imageBuffer, width, height, components, 4);
         
         if (data == null)
