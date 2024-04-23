@@ -33,7 +33,7 @@ public class SimpleSample extends Solid{
 
         // Buffers
         OGLBuffers.Attrib[] attributes = {
-                new OGLBuffers.Attrib("inPosition", 3)
+                new OGLBuffers.Attrib("inPosition", 3),
         };
         buffers = new OGLBuffers(vertices, attributes, indices);
     }

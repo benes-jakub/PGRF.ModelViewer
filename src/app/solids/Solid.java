@@ -38,4 +38,8 @@ public class Solid {
         int uLightColor = glGetUniformLocation(shader, "uLightColor");
         glUniform3f(uLightColor, (float)light.getColor().getX(), (float)light.getColor().getY(), (float)light.getColor().getZ());
     };
+
+    public void setModel(Mat4 model) {
+        this.model = model;
+    }
 }

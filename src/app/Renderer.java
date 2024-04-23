@@ -1,9 +1,6 @@
 package app;
 
-import app.solids.Axis;
-import app.solids.Light;
-import app.solids.SimpleSample;
-import app.solids.Solid;
+import app.solids.*;
 import lwjglutils.OGLBuffers;
 import lwjglutils.ShaderUtils;
 import org.lwjgl.BufferUtils;
@@ -12,10 +9,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWScrollCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
-import transforms.Camera;
-import transforms.Mat4;
-import transforms.Mat4PerspRH;
-import transforms.Vec3D;
+import transforms.*;
 
 import java.io.IOException;
 import java.nio.DoubleBuffer;
@@ -37,8 +31,10 @@ public class Renderer extends AbstractRenderer {
 
     // Solids
     private Axis axis;
-    private SimpleSample simpleSample;
     private Light light;
+    private SimpleSample simpleSample;
+
+    private Dragon dragon;
 
     @Override
     public void init() {
@@ -55,13 +51,8 @@ public class Renderer extends AbstractRenderer {
 
         renderSolid(axis);
         renderSolid(light);
-        renderSolid(simpleSample);
-    }
-
-    private void renderSolid(Solid solid) {
-        glUseProgram(solid.getShader());
-        setGlobalUniforms(solid.getShader());
-        solid.draw(light);
+//        renderSolid(simpleSample);
+        renderSolid(dragon);
     }
 
     private void initSolids() {
@@ -70,9 +61,17 @@ public class Renderer extends AbstractRenderer {
 
         try {
             simpleSample = new SimpleSample(phongShader);
+            dragon = new Dragon(phongShader);
+            dragon.setModel(new Mat4Scale(0.1f, 0.1f, 0.1f).mul(new Mat4RotX(Math.toRadians(90))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void initShaders() {
+        vertexColorShader = ShaderUtils.loadProgram("/shaders/vertexColor");
+        flatColorShader = ShaderUtils.loadProgram("/shaders/flatColor");
+        phongShader = ShaderUtils.loadProgram("/shaders/phong");
     }
 
     private void initCamera() {
@@ -86,10 +85,10 @@ public class Renderer extends AbstractRenderer {
         proj = new Mat4PerspRH(Math.PI / 4, height / (float) width, 0.1f, 100.f);
     }
 
-    private void initShaders() {
-        vertexColorShader = ShaderUtils.loadProgram("/shaders/vertexColor");
-        flatColorShader = ShaderUtils.loadProgram("/shaders/flatColor");
-        phongShader = ShaderUtils.loadProgram("/shaders/phong");
+    private void renderSolid(Solid solid) {
+        glUseProgram(solid.getShader());
+        setGlobalUniforms(solid.getShader());
+        solid.draw(light);
     }
 
     private void setGlobalUniforms(int shader) {
