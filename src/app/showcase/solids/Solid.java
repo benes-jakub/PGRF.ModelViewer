@@ -19,10 +19,10 @@ public class Solid {
     private List<SolidPart> parts = new ArrayList<>();
     private OGLTexture2D texture;
 
-    public Solid() throws IOException {
+    public Solid(String objPath, String objFolder, String texturePath) throws IOException {
         // Read an OBJ file
         InputStream objInputStream =
-                new FileInputStream("./res/obj/cottage/cottage.obj");
+                new FileInputStream(objPath);
         Obj originalObj = ObjReader.read(objInputStream);
 
         // Convert the OBJ into a "renderable" OBJ. 
@@ -35,7 +35,7 @@ public class Solid {
         List<Mtl> allMtls = new ArrayList<>();
         for (String mtlFileName : obj.getMtlFileNames()) {
             InputStream mtlInputStream =
-                    new FileInputStream("./res/obj/cottage/" + mtlFileName);
+                    new FileInputStream(objFolder + mtlFileName);
             allMtls.addAll(MtlReader.read(mtlInputStream));
         }
 
@@ -52,6 +52,7 @@ public class Solid {
 
             // Find the MTL that defines the material with the current name
             Mtl mtl = findMtlForName(allMtls, materialName);
+            if(mtl == null) continue;
 
             float[] texCoords = ObjData.getTexCoordsArray(materialGroup, 2);
 
@@ -68,7 +69,7 @@ public class Solid {
             );
         }
 
-        texture = new OGLTexture2D("./obj/cottage/cottage_diffuse.png");
+        texture = new OGLTexture2D(texturePath);
     }
 
     public void draw(int shader) {
@@ -84,13 +85,22 @@ public class Solid {
             FloatTuple specularColor = part.getMaterial().getKs();
 
             int uLightAmbientColor = glGetUniformLocation(shader, "uLightAmbientColor");
-            glUniform3f(uLightAmbientColor, ambientColor.getX(), ambientColor.getY(), ambientColor.getZ());
+            if(ambientColor != null)
+                glUniform3f(uLightAmbientColor, ambientColor.getX(), ambientColor.getY(), ambientColor.getZ());
+            else
+                glUniform3f(uLightAmbientColor, 1, 1, 1);
 
             int uLightDiffuseColor = glGetUniformLocation(shader, "uLightDiffuseColor");
-            glUniform3f(uLightDiffuseColor, diffuseColor.getX(), diffuseColor.getY(), diffuseColor.getZ());
+            if(diffuseColor != null)
+                glUniform3f(uLightDiffuseColor, diffuseColor.getX(), diffuseColor.getY(), diffuseColor.getZ());
+            else
+                glUniform3f(uLightDiffuseColor, 1, 1, 1);
 
             int uLightSpecularColor = glGetUniformLocation(shader, "uLightSpecularColor");
-            glUniform3f(uLightSpecularColor, specularColor.getX(), specularColor.getY(), specularColor.getZ());
+            if(specularColor != null)
+                glUniform3f(uLightSpecularColor, specularColor.getX(), specularColor.getY(), specularColor.getZ());
+            else
+                glUniform3f(uLightSpecularColor, 1, 1, 1);
 
             int uIsTexture = glGetUniformLocation(shader, "uIsTexture");
             glUniform1i(uIsTexture, part.isTexture() ? 1 : 0);
