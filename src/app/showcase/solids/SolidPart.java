@@ -56,4 +56,12 @@ public class SolidPart {
     public boolean isTexture() {
         return isTexture;
     }
+
+    public float[] getVb() {
+        return vb;
+    }
+
+    public int[] getIb() {
+        return ib;
+    }
 }

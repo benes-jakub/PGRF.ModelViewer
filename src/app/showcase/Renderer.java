@@ -60,9 +60,9 @@ public class Renderer extends AbstractRenderer {
         );
 
         try {
-//            solid = new Solid("./res/obj/cottage/cottage.obj", "./res/obj/cottage/", "./obj/cottage/cottage_diffuse.png");
+            solid = new Solid("./res/obj/cottage/cottage.obj", "./res/obj/cottage/", "./obj/cottage/cottage_diffuse.png");
 //            solid = new Solid("./res/obj/skull/12140_Skull_v3_L2.obj", "./res/obj/skull/", "./obj/skull/Skull.jpg");
-            solid = new Solid("./res/obj/airplane/11803_Airplane_v1_l1.obj", "./res/obj/airplane/", "./obj/airplane/11803_Airplane_body_diff.jpg");
+//            solid = new Solid("./res/obj/airplane/11803_Airplane_v1_l1.obj", "./res/obj/airplane/", "./obj/airplane/11803_Airplane_body_diff.jpg");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
